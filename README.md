@@ -1,7 +1,10 @@
-<img src="images/reflixel.svg" alt="Reflixel Logo" align="right" width="200" height="200" />
+<img src="images/superflixel.svg" alt="SuperFlixel Logo" align="right" width="200" height="200" />
 
-# Reflixel
-Reflixel is a remake of [HaxeFlixel](https://github.com/HaxeFlixel/flixel) without the Lime or OpenFL backends.
+# SuperFlixel
+SuperFlixel is a remake of [HaxeFlixel](https://github.com/HaxeFlixel/flixel) without the Lime or OpenFL backends.
+
+It will have a very similar file structure to HaxeFlixel, most likely with
+some differences due to differing backends.
 
 # Platforms
 Due to not using Lime or OpenFL to develop this project, it will be extremely hard to
