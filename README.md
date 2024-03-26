@@ -8,4 +8,5 @@ Due to not using Lime or OpenFL to develop this project, it will be extremely ha
 be cross-platform, so for the time being this will be Desktop **only**.
 
 The following platforms are natively supported:
+
 ![](images/platforms.png)
