@@ -1,4 +1,4 @@
-<img src="images/superflixel.svg" alt="SuperFlixel Logo" align="right" width="200" height="200" />
+<img src="images/superflixel.svg" alt="SuperFlixel Logo" align="right" width="140" height="140" />
 
 # SuperFlixel
 SuperFlixel is a remake of [HaxeFlixel](https://github.com/HaxeFlixel/flixel) without the Lime or OpenFL backends.
