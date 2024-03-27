@@ -1,0 +1,5 @@
+--define HXCPP_CHECK_POINTER
+--define HXCPP_STACK_LINE
+
+--macro canvas.macros.OSDefineMacro.build()
+--macro canvas.macros.ProjectMacro.build()

@@ -1,0 +1,3 @@
+--class-path source
+--define analyzer-optimize
+--cpp export/cpp

@@ -1,0 +1,14 @@
+{
+    "name": "superflixel",
+    "url" : "https://github.com/swordcube/superflixel",
+    "license": "GPL",
+    "tags": ["haxe", "hxcpp", "flixel", "superflixel", "2d", "2d-game", "2d-framework", "2d-game-framework", "cpp", "sdl", "stb_vorbis", "vorbis", "dr_wav", "wav", "ogg"],
+    "description": "A remake of HaxeFlixel without the Lime or OpenFL backends",
+    "version": "1.0.0",
+    "classPath": "source/",
+    "releasenote": "Initial release of SuperFlixel",
+    "contributors": ["swordcube"],
+    "dependencies": {
+        "hxcpp": ""
+    }
+}
