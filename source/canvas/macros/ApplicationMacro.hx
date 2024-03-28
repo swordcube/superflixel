@@ -1,16 +1,18 @@
 package canvas.macros;
 
+import haxe.io.Path;
+
 import sys.io.File;
 import sys.FileSystem;
-import haxe.io.Path;
 
 #if macro
 import haxe.macro.*;
 import haxe.macro.Expr;
 #end
 
-#if (macro || !eval)
 import canvas.backend.Application;
+#if (macro || !eval)
+import canvas.backend.Project;
 import canvas.backend.Application.ApplicationConfig;
 #end
 
@@ -33,12 +35,12 @@ class ApplicationMacro {
 		if (!FileSystem.exists(cfgPath))
 			Context.fatalError('Couldn\'t find a valid "project.xml" file!', pos);
 
-		final cfg:ApplicationConfig = Application.parseXmlConfig(Xml.parse(File.getContent(cfgPath)));
+		final cfg:ApplicationConfig = Project.parseXmlConfig(Xml.parse(File.getContent(cfgPath)));
         
         // The actual macro
         var mainExpr = macro {
             final app:Application = Type.createInstance(Type.resolveClass($v{cfg.main}), []);
-            app.startEventLoop();
+            app.start();
         };
 
         var func:Function = {

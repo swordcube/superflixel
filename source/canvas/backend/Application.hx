@@ -1,8 +1,8 @@
 package canvas.backend;
 
-import haxe.xml.Access;
-import haxe.macro.Compiler;
-import haxe.macro.ExprTools;
+#if !macro
+import canvas.macros.ProjectMacro;
+#end
 
 typedef HaxelibSection = {
 	var name:String;
@@ -11,6 +11,11 @@ typedef HaxelibSection = {
 }
 
 typedef HaxedefSection = {
+	var name:String;
+	var value:String;
+}
+
+typedef HaxeflagSection = {
 	var name:String;
 	var value:String;
 }
@@ -56,12 +61,16 @@ typedef ApplicationConfig = {
 	// <haxedef/>
 	var haxedefs:Array<HaxedefSection>;
 
+	// <haxeflag/>
+	var haxeflags:Array<HaxedefSection>;
+
 	// <icon/>
 	var icon:String;
 }
 
+#if !macro
 @:autoBuild(canvas.macros.ApplicationMacro.build())
-class Application {
+class Application extends Canvas {
 	/**
 	 * The current application instance.
 	 */
@@ -70,98 +79,17 @@ class Application {
 	/**
 	 * The configuration data for this application.
 	 */
-	public var config:ApplicationConfig;
+	public var meta:ApplicationConfig;
 
 	/**
-	 * Parses a given project xml into application configuration data.
-	 */
-	public static function parseXmlConfig(xml:Xml) {
-		final data:Access = cast (xml.nodeType == Element ? xml : xml.firstElement());
-		final parsed:ApplicationConfig = {
-			defined: [],
-
-			title: "SuperFlixel Project",
-			file: "Main",
-			main: "Main",
-			version: "0.0.1",
-			company: "SuperFlixel",
-
-			window: {
-				width: "640",
-				height: "480",
-				fps: "0",
-				background: "#000000",
-				vsync: "false",
-				orientation: "landscape",
-				fullscreen: "false",
-				resizable: "true"
-			},
-
-			source: "source",
-			assetFolders: [],
-
-			haxelibs: [],
-			haxedefs: [],
-
-			icon: null
-		};
-
-		function parseElementsInXml(data:Access) {
-			for(element in data.elements) {
-				final key:String = element.att.resolve("if");
-				final defineValue:String = Compiler.getDefine(key); // this errors and idk why
-				final ifValue:String = (element.has.resolve("if")) ? defineValue ?? parsed.defined.get(key) : null;
-				final unlessValue:String = (element.has.resolve("unless")) ? parsed.defined.get(element.att.resolve("unless")) : null;
-				
-				final canRun:Bool = !(ifValue == null || ifValue == "0" || ifValue == "false") && (unlessValue == null || unlessValue == "0" || unlessValue == "false");
-				if (!canRun)
-					continue;
-	
-				switch(element.name.toLowerCase()) {
-					case "section":
-						parseElementsInXml(element); // recursion 🤯 
-
-					case "app", "window":
-						final attNames:Array<String> = [for(n in element.x.attributes()) n];
-						for(attName in attNames) {
-							final value:String = element.att.resolve(attName);
-							Reflect.setField(parsed, attName, value);
-						}
-	
-					case "set", "define":
-						parsed.defined.set(element.att.name, element.att.value);
-					
-					case "source":
-						parsed.source = element.att.path;
-	
-					case "assets":
-						parsed.assetFolders.push(element.att.path);
-
-					case "haxelib":
-						parsed.haxelibs.push({
-							name: element.att.name,
-							version: element.has.version ? element.att.version : null
-						});
-						
-					case "haxedef":
-						parsed.haxedefs.push({
-							name: element.att.name,
-							value: element.has.value ? element.att.value : "1"
-						});
-				}
-			}
-		}
-		parseElementsInXml(data);
-
-		return parsed;
-	}
-
-	/**
-	 * Makes a new `Application`.
+	 * Makes a new `Application` instance.
 	 */
 	public function new() {
+		super();
 		if(self == null)
 			self = this;
+
+		meta = Project.parseXmlConfig(Xml.parse(ProjectMacro.getConfig()));
 	}
 
 	/**
@@ -171,3 +99,8 @@ class Application {
 
 	}
 }
+#else
+class Application {
+	public function new() {}
+}
+#end

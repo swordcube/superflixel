@@ -1,6 +1,6 @@
 package flixel;
 
-import canvas.CanvasObject;
+import canvas.Canvas;
 
 /**
  * `FlxGame` is the heart of all Flixel games, and contains a bunch of basic game loops and things.
@@ -10,11 +10,11 @@ import canvas.CanvasObject;
  * after that `FlxG` and `FlxState` have all the useful stuff you actually need.
  */
 @:allow(flixel.FlxG)
-class FlxGame extends CanvasObject {
+class FlxGame extends Canvas {
 	/**
 	 * Makes a new `FlxGame` instance.
 	 */
-	public function new() {
+	public function new(width:Int = 0, height:Int = 0) {
 		super();
 	}
 }

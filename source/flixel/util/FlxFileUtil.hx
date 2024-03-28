@@ -9,7 +9,7 @@ import haxe.zip.Reader as ZipReader;
  * A class with some file utilities that Haxe doesn't
  * already have or is more inconvenient.
  */
-class FileUtil {
+class FlxFileUtil {
 	/**
 	 * Copies a directory with all of it's files/directories to another directory.
 	 * 
@@ -18,7 +18,9 @@ class FileUtil {
 	 */
 	public static function copyDirectory(source:String, destination:String) {
 		if (!FileSystem.exists(source)) {
+			#if !macro
 			trace('The directory at $source doesn\'t exist and cannot be copied.');
+			#end
 			return;
 		}
 		if (!FileSystem.exists(destination))

@@ -3,3 +3,4 @@
 
 --macro canvas.macros.OSDefineMacro.build()
 --macro canvas.macros.ProjectMacro.build()
+--macro flixel.system.macros.FlxDefines.run()

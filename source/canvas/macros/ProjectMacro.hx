@@ -10,10 +10,12 @@ import haxe.macro.Expr;
 #end
 
 #if (macro || !eval)
-import flixel.util.FlxFileUtil;
 import canvas.backend.Application;
 import canvas.backend.Application.ApplicationConfig;
 #end
+
+import canvas.backend.Project;
+import flixel.util.FlxFileUtil;
 
 #if macro
 using haxe.macro.PositionTools;
@@ -33,22 +35,37 @@ class ProjectMacro {
 
 		sourcePath = Path.normalize(sourcePath);
 
-		final cfgPath:String = Path.normalize(Path.join([sourcePath, "project.cfg"]));
-		if (!FileSystem.exists(cfgPath))
-			Context.fatalError('Couldn\'t find a valid "project.cfg" file!', pos);
+		final xmlPath:String = Path.normalize(Path.join([sourcePath, "project.xml"]));
+		if (!FileSystem.exists(xmlPath))
+			Context.fatalError('Couldn\'t find a valid "project.xml" file!', pos);
 
-		final cfg:ApplicationConfig = Application.parseXmlConfig(Xml.parse(File.getContent(cfgPath)));
+		final cfg:ApplicationConfig = Project.parseXmlConfig(Xml.parse(File.getContent(xmlPath)));
 		final platform:String = Sys.systemName().toLowerCase();
 
 		// Copy specified asset folders to export folder
 		for (folder in cfg.assetFolders) {
 			final dirToCopy:String = Path.normalize(Path.join([sourcePath, folder]));
 			final destDir:String = Path.normalize(Path.join([sourcePath, cfg.defined.get("BUILD_DIR") ?? "export", platform, "bin", folder]));
-			FileUtil.copyDirectory(dirToCopy, destDir);
+			FlxFileUtil.copyDirectory(dirToCopy, destDir);
 		}
 		return Context.getBuildFields();
 		#else
 		return null;
 		#end
     }
+
+	public static macro function getConfigDir():Expr {
+		return macro $v{Path.normalize(Sys.getCwd())};
+	}
+
+	public static macro function getConfig():Expr {
+		final cwd:String = Path.normalize(Sys.getCwd());
+		final xmlPath:String = Path.normalize(Path.join([cwd, "project.xml"]));
+
+		if (!FileSystem.exists(xmlPath))
+			Context.fatalError('Couldn\'t find a valid "project.xml" file! ' + xmlPath, Context.currentPos());
+
+		final content:String = File.getContent(xmlPath);
+		return macro $v{content};
+	}
 }
