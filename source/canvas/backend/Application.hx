@@ -1,5 +1,10 @@
 package canvas.backend;
 
+#if (!macro && !eval)
+import sdl.SDL;
+import sdl.Types.InitFlags;
+#end
+
 #if !macro
 import canvas.macros.ProjectMacro;
 #end
@@ -34,7 +39,6 @@ typedef WindowSection = {
 /**
  * The configuration data for an application.
  */
-// ! - Make <section if="shit"> work!!
 typedef ApplicationConfig = {
 	// <misc/>
 	var defined:Map<String, String>; // set using <set/> or <define/>
@@ -74,7 +78,7 @@ class Application extends Canvas {
 	/**
 	 * The current application instance.
 	 */
-	public static var self:Application;
+	public static var current:Application;
 
 	/**
 	 * The configuration data for this application.
@@ -82,12 +86,17 @@ class Application extends Canvas {
 	public var meta:ApplicationConfig;
 
 	/**
+	 * The main window of this application.
+	 */
+	public var window:Window;
+
+	/**
 	 * Makes a new `Application` instance.
 	 */
 	public function new() {
 		super();
-		if(self == null)
-			self = this;
+		if(current == null)
+			current = this;
 
 		meta = Project.parseXmlConfig(Xml.parse(ProjectMacro.getConfig()));
 	}
@@ -96,7 +105,10 @@ class Application extends Canvas {
 	 * Starts this application.
 	 */
 	public function start() {
-
+		#if (!macro && !eval)
+		SDL.init(VIDEO | EVENTS);
+		window = new Window(meta.title, 0x2FFF0000, 0x2FFF0000, Std.parseInt(meta.window.width), Std.parseInt(meta.window.height));
+		#end
 	}
 }
 #else

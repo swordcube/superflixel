@@ -1,3 +1,5 @@
+--library hxsdl
+--library hxglad
 --class-path source
 --define analyzer-optimize
 --cpp export/cpp

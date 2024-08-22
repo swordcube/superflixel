@@ -9,6 +9,8 @@
     "releasenote": "Initial release of SuperFlixel",
     "contributors": ["swordcube"],
     "dependencies": {
-        "hxcpp": ""
+        "hxcpp": "",
+        "hxsdl": "",
+        "hxglad": ""
     }
 }
